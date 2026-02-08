@@ -110,13 +110,20 @@ To translate the book into a new language:
 2. In your new directory (e.g., `pt/`):
    - Translate all `.qmd` files (chapters, index, references)
    - Translate or recreate images that contain text (SVGs in `images/`)
-   - Update `_quarto.yml`: change `output-dir` to `../docs/pt` and translate the title/subtitle
+   - Update `_quarto.yml`: change `output-dir` to `../docs/pt`, translate the title/subtitle, and update `output-file` to use your language code (e.g., `"Practical Web Development (pt)"`)
    - Code in `code/` may need translated comments
 
-3. Build with:
+3. Update the cover image:
+   - Edit `images/cover.svg` — translate the text elements (title, subtitle, author) to your language
+   - Convert the SVG to PNG for PDF rendering (requires `rsvg-convert`, installed via `librsvg`):
+     ```bash
+     rsvg-convert -f png -w 2400 -h 3600 -o pt/images/cover.png pt/images/cover.svg
+     ```
+
+4. Build with:
    ```bash
-   cd pt
-   uv run quarto render
+   uv run quarto render pt/
+   uv run quarto render pt/ --to pdf
    ```
 
 4. Add yourself to the contributors table below and submit a pull request.
