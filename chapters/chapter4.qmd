@@ -86,9 +86,20 @@ The `str | None` means "either a string or None." The `= None` makes it optional
 
 ## Your First Server
 
-Now let's write some code. In `main.py`:
+Now let's write some code. In `main.py`, start with the import and app creation:
 
 ```python
+from fastapi import FastAPI
+
+app = FastAPI()
+```
+
+`from fastapi import FastAPI` imports the FastAPI class. `app = FastAPI()` creates your application. This object handles all the HTTP stuff.
+
+Now add your first route:
+
+```python
+# main.py
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -98,12 +109,6 @@ app = FastAPI()
 def home():
     return {"message": "Hello, world!"}
 ```
-
-Four lines of actual code. Here's what each does.
-
-`from fastapi import FastAPI` imports the FastAPI class.
-
-`app = FastAPI()` creates your application. This object handles all the HTTP stuff.
 
 `@app.get("/")` is a decorator that tells FastAPI: when someone makes a GET request to `/`, run the function below.
 
@@ -127,18 +132,11 @@ The `fastapi dev` command watches for changes and automatically restarts when yo
 
 ## Routes and Endpoints
 
-A **route** is a path that your server responds to. An **endpoint** is the function that handles that route. Let's add more routes:
+A **route** is a path that your server responds to. An **endpoint** is the function that handles that route. Let's add more routes. Add these below your existing `home` function:
 
 ```python
-from fastapi import FastAPI
-
-app = FastAPI()
-
-
-@app.get("/")
-def home():
-    return {"message": "Hello, world!"}
-
+# main.py
+# ...existing code above
 
 @app.get("/about")
 def about():
@@ -166,8 +164,10 @@ The function names don't matter to FastAPI (you could call them all `def x():`),
 ## Path Parameters
 
 Sometimes you want part of the URL to be a variable. Consider a user profile page: you don't want to write a separate route for every user. You want one route that works for any user ID.
-
 ```python
+# main.py
+# ...existing code above
+
 @app.get("/users/{user_id}")
 def get_user(user_id: int):
     return {"user_id": user_id, "name": f"User {user_id}"}
@@ -204,6 +204,9 @@ Path parameters are part of the URL path. **Query parameters** come after the `?
 In FastAPI, any function parameter that isn't in the path is treated as a query parameter:
 
 ```python
+# main.py
+# ...existing code above
+
 @app.get("/search")
 def search(q: str, limit: int = 10):
     return {"query": q, "limit": limit}
@@ -251,13 +254,18 @@ The `Content-Type` header is set to `application/json`. That's an API response. 
 
 ## Returning HTML
 
-For a website that humans visit (not just an API for code to consume), we want to return HTML that browsers can render:
+For a website that humans visit (not just an API for code to consume), we want to return HTML that browsers can render. First, let's delete everything we had in our `main.py`, then we need to import `HTMLResponse`:
 
 ```python
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+```
 
-app = FastAPI()
+Then we can return HTML strings from our endpoints:
+
+```python
+# main.py
+# ...existing code above
 
 @app.get("/", response_class=HTMLResponse)
 def home():
@@ -294,92 +302,31 @@ chapter4/
     └── profile.css
 ```
 
-Copy your `profile.css` from Chapter 3 into the `static` folder. If you don't have it, here's a minimal version:
+Copy your `profile.css` from Chapter 3 into the `static` folder.
 
-```css
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    background-color: #2c3e50;
-    color: white;
-    padding: 40px 20px;
-    text-align: center;
-}
-
-header h1 {
-    margin: 0 0 10px 0;
-}
-
-header nav {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-header nav a {
-    color: white;
-    text-decoration: none;
-}
-
-main {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px 20px;
-}
-
-section {
-    margin-bottom: 40px;
-}
-
-h2 {
-    color: #2c3e50;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 10px;
-}
-
-#skills ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-#skills li {
-    background-color: #3498db;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-}
-
-footer {
-    background-color: #2c3e50;
-    color: white;
-    text-align: center;
-    padding: 20px;
-}
-```
-
-Now update `main.py`:
-
+Now let's build `main.py` step by step. Start fresh with the imports:
 ```python
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
+```
+
+Next, tell FastAPI where to find static files:
+```python
+# main.py
+# ...imports and app above
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+```
+
+This line tells FastAPI: any request starting with `/static/` should look for files in the `static` folder. This is how web applications serve CSS, JavaScript, and images.
+
+Now add the profile data:
+```python
+# main.py
+# ...static files setup above
 
 profile = {
     "name": "Philipe Ackerman",
@@ -389,12 +336,27 @@ profile = {
     ],
     "skills": ["Math", "Having Long Hair", "Video Recording"],
 }
+```
 
+This dictionary is our data. Right now it's hardcoded, but it could come from a database, a file, or user input.
+
+Finally, the endpoint that generates the HTML. First, we build the dynamic parts:
+```python
+# main.py
+# ...profile data above
 
 @app.get("/", response_class=HTMLResponse)
 def home():
     skills_html = "".join(f"<li>{skill}</li>" for skill in profile["skills"])
     about_html = "".join(f"<p>{para}</p>" for para in profile["about"])
+```
+
+We loop through the skills and about paragraphs to generate the list items and paragraphs as HTML strings.
+
+Then we return the full HTML page using an f-string:
+```python
+# main.py
+# inside the home() function, after building skills_html and about_html
 
     return f"""
     <!DOCTYPE html>
@@ -434,13 +396,7 @@ def home():
     """
 ```
 
-A few things to note here.
-
-The `app.mount("/static", ...)` line tells FastAPI: any request starting with `/static/` should look for files in the `static` folder. This is how web applications serve CSS, JavaScript, and images.
-
-The `profile` dictionary is our data. Right now it's hardcoded, but it could come from a database, a file, or user input.
-
-The f-string builds the HTML dynamically. Change the name in the dictionary, save, and refresh. The page updates. This is the core idea of dynamic websites: the same code generates different pages based on different data.
+The f-string inserts our profile data into the HTML. Change the name in the dictionary, save, and refresh. The page updates. This is the core idea of dynamic websites: the same code generates different pages based on different data.
 
 Run the server and visit `http://localhost:8000`. You should see the styled profile page:
 
