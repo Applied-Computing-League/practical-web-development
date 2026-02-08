@@ -143,22 +143,6 @@ You'll see the HTML document load first, then requests for CSS, JavaScript, imag
 
 This isn't just educational. When something isn't working, the Network tab tells you what's actually being sent and received. You'll use it constantly to debug.
 
-## What We're Building
-
-Now that you understand the mechanics, here's where we're headed.
-
-We start with HTML and CSS, the languages that define what pages contain and how they look. These are what your server sends to browsers.
-
-Then we build servers with Python and FastAPI. You'll write code that receives HTTP requests and sends back responses. First simple HTML, then templates to generate complex pages from data.
-
-We'll handle forms and user input: how data flows from browser to server.
-
-For interactivity, we'll look at two approaches. HTMX lets you update parts of a page without writing JavaScript—the server still generates HTML, but the browser swaps it in without reloading. Then React, where the browser takes over more work and your server becomes an API that returns data instead of HTML. You'll understand both and know when to use which.
-
-We'll add databases so applications can remember things, and authentication so users can have accounts.
-
-Finally, we'll deploy to a real server so anyone can use what you've built.
-
 ## Hands-On: Exploring HTTP with Browser Dev Tools
 
 Let's put this into practice.
