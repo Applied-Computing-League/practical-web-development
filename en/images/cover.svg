@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900">
+  <style>
+    .title { font-family: 'Courier New', monospace; font-size: 38px; font-weight: bold; fill: #4CD137; }
+    .subtitle { font-family: 'Courier New', monospace; font-size: 14px; fill: #4CD137; }
+    .author { font-family: 'Courier New', monospace; font-size: 18px; fill: #4CD137; }
+  </style>
+
+  <!-- Background -->
+  <rect width="600" height="900" fill="#000" />
+
+  <!-- Title -->
+  <text x="50" y="100" class="title">Practical</text>
+  <text x="50" y="145" class="title">Web</text>
+  <text x="50" y="190" class="title">Development</text>
+
+  <!-- Cursor after title (solid) -->
+  <rect x="378" y="168" width="14" height="28" fill="#4CD137" opacity="0.9" />
+
+  <!-- Subtitle -->
+  <text x="50" y="245" class="subtitle">From Server-Rendered Pages to React</text>
+  <text x="50" y="268" class="subtitle">with Python and FastAPI</text>
+
+  <!-- Architecture Diagram - moved down -->
+  <g transform="translate(300, 560)">
+
+    <!-- Browser window at top -->
+    <g transform="translate(0, -200)">
+      <rect x="-50" y="-30" width="100" height="60" rx="5" fill="none" stroke="#4CD137" stroke-width="2" />
+      <line x1="-50" y1="-15" x2="50" y2="-15" stroke="#4CD137" stroke-width="1.5" />
+      <circle cx="-38" cy="-22" r="3" fill="#4CD137" />
+      <circle cx="-26" cy="-22" r="3" fill="#4CD137" />
+      <circle cx="-14" cy="-22" r="3" fill="#4CD137" />
+    </g>
+
+    <!-- Line from browser to load balancer -->
+    <line x1="0" y1="-170" x2="0" y2="-115" stroke="#4CD137" stroke-width="2" />
+    <!-- Arrow pointing down -->
+    <path d="M 0,-110 L -6,-122 L 6,-122 Z" fill="#4CD137" />
+
+    <!-- Load balancer (hexagon-ish shape) -->
+    <g transform="translate(0, -80)">
+      <polygon points="0,-30 35,-15 35,15 0,30 -35,15 -35,-15" fill="none" stroke="#4CD137" stroke-width="2" />
+      <circle cx="0" cy="0" r="10" fill="#4CD137" />
+    </g>
+
+    <!-- Lines from load balancer to API servers -->
+    <!-- Left API -->
+    <line x1="-28" y1="-55" x2="-115" y2="15" stroke="#4CD137" stroke-width="1.5" />
+    <path d="M -120,20 L -105,18 L -113,8 Z" fill="#4CD137" />
+
+    <!-- Center API -->
+    <line x1="0" y1="-50" x2="0" y2="15" stroke="#4CD137" stroke-width="1.5" />
+    <path d="M 0,20 L -6,8 L 6,8 Z" fill="#4CD137" />
+
+    <!-- Right API -->
+    <line x1="28" y1="-55" x2="115" y2="15" stroke="#4CD137" stroke-width="1.5" />
+    <path d="M 120,20 L 105,18 L 113,8 Z" fill="#4CD137" />
+
+    <!-- API Server 1 (left) -->
+    <g transform="translate(-120, 55)">
+      <rect x="-30" y="-30" width="60" height="60" rx="4" fill="none" stroke="#4CD137" stroke-width="1.5" />
+      <line x1="-20" y1="-15" x2="20" y2="-15" stroke="#4CD137" stroke-width="1" />
+      <line x1="-20" y1="0" x2="20" y2="0" stroke="#4CD137" stroke-width="1" />
+      <line x1="-20" y1="15" x2="10" y2="15" stroke="#4CD137" stroke-width="1" />
+      <circle cx="-22" cy="-15" r="2" fill="#4CD137" />
+      <circle cx="-22" cy="0" r="2" fill="#4CD137" />
+      <circle cx="-22" cy="15" r="2" fill="#4CD137" />
+    </g>
+
+    <!-- API Server 2 (center) -->
+    <g transform="translate(0, 55)">
+      <rect x="-30" y="-30" width="60" height="60" rx="4" fill="none" stroke="#4CD137" stroke-width="2" />
+      <line x1="-20" y1="-15" x2="20" y2="-15" stroke="#4CD137" stroke-width="1" />
+      <line x1="-20" y1="0" x2="20" y2="0" stroke="#4CD137" stroke-width="1" />
+      <line x1="-20" y1="15" x2="10" y2="15" stroke="#4CD137" stroke-width="1" />
+      <circle cx="-22" cy="-15" r="2" fill="#4CD137" />
+      <circle cx="-22" cy="0" r="2" fill="#4CD137" />
+      <circle cx="-22" cy="15" r="2" fill="#4CD137" />
+    </g>
+
+    <!-- API Server 3 (right) -->
+    <g transform="translate(120, 55)">
+      <rect x="-30" y="-30" width="60" height="60" rx="4" fill="none" stroke="#4CD137" stroke-width="1.5" />
+      <line x1="-20" y1="-15" x2="20" y2="-15" stroke="#4CD137" stroke-width="1" />
+      <line x1="-20" y1="0" x2="20" y2="0" stroke="#4CD137" stroke-width="1" />
+      <line x1="-20" y1="15" x2="10" y2="15" stroke="#4CD137" stroke-width="1" />
+      <circle cx="-22" cy="-15" r="2" fill="#4CD137" />
+      <circle cx="-22" cy="0" r="2" fill="#4CD137" />
+      <circle cx="-22" cy="15" r="2" fill="#4CD137" />
+    </g>
+
+    <!-- Lines from API servers to database -->
+    <!-- Left to DB -->
+    <line x1="-115" y1="90" x2="-45" y2="145" stroke="#4CD137" stroke-width="1.5" />
+    <path d="M -40,150 L -55,148 L -47,138 Z" fill="#4CD137" />
+
+    <!-- Center to DB -->
+    <line x1="0" y1="85" x2="0" y2="145" stroke="#4CD137" stroke-width="1.5" />
+    <path d="M 0,150 L -6,138 L 6,138 Z" fill="#4CD137" />
+
+    <!-- Right to DB -->
+    <line x1="115" y1="90" x2="45" y2="145" stroke="#4CD137" stroke-width="1.5" />
+    <path d="M 40,150 L 55,148 L 47,138 Z" fill="#4CD137" />
+
+    <!-- Database (cylinder) -->
+    <g transform="translate(0, 185)">
+      <ellipse cx="0" cy="-20" rx="50" ry="12" fill="none" stroke="#4CD137" stroke-width="2" />
+      <line x1="-50" y1="-20" x2="-50" y2="20" stroke="#4CD137" stroke-width="2" />
+      <line x1="50" y1="-20" x2="50" y2="20" stroke="#4CD137" stroke-width="2" />
+      <ellipse cx="0" cy="20" rx="50" ry="12" fill="none" stroke="#4CD137" stroke-width="2" />
+      <path d="M -50,-5 Q 0,8 50,-5" fill="none" stroke="#4CD137" stroke-width="1" opacity="0.5" />
+      <path d="M -50,8 Q 0,20 50,8" fill="none" stroke="#4CD137" stroke-width="1" opacity="0.5" />
+    </g>
+
+  </g>
+
+  <!-- Author -->
+  <text x="300" y="850" text-anchor="middle" class="author">Igor Benav</text>
+</svg>

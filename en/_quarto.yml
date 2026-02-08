@@ -80,6 +80,19 @@ format:
       labels: "all"
     # Additional LaTeX settings
     header-includes:
+      - \usepackage{tikz}
+      - |
+        \let\oldmaketitle\maketitle
+        \renewcommand{\maketitle}{%
+          \thispagestyle{empty}
+          \begin{tikzpicture}[remember picture, overlay]
+            \node[inner sep=0pt] at (current page.center) {%
+              \includegraphics[width=\paperwidth, height=\paperheight]{images/cover.png}%
+            };
+          \end{tikzpicture}
+          \clearpage
+          \oldmaketitle
+        }
       - \usepackage{booktabs}
       - \usepackage{hyperref}
       - \hypersetup{colorlinks=true, linkcolor=blue, filecolor=blue, urlcolor=blue, citecolor=blue}
