@@ -475,7 +475,7 @@ Fill in the blanks. Add real content about yourself (or about a character, be cr
 ::: {.callout-tip collapse="true"}
 ## Stuck? Solution available
 
-If you've given it an honest try and are truly stuck, a completed version of this project is available at [github.com/Applied-Computing-League/web-intro/chapters/code/chapter2](https://github.com/Applied-Computing-League/web-intro/tree/main/chapters/code/chapter2). Try to solve it yourself first. You learn more from the struggle than from reading the answer.
+If you've given it an honest try and are truly stuck, a completed version of this project is available at [github.com/Applied-Computing-League/practical-web-development/en/code/chapter2](https://github.com/Applied-Computing-League/practical-web-development/tree/main/en/code/chapter2). Try to solve it yourself first. You learn more from the struggle than from reading the answer.
 :::
 
 Open the file in your browser to see the result. It won't look pretty (that's what CSS is for), but the structure should be clear. Try viewing the page source in your browser. What you see should match what you wrote.

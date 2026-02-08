@@ -29,8 +29,8 @@ More chapters will be added.
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Applied-Computing-League/web-intro.git
-   cd web-intro
+   git clone https://github.com/Applied-Computing-League/practical-web-development.git
+   cd practical-web-development
    ```
 
 2. Install Python dependencies with uv:
@@ -70,7 +70,7 @@ This starts a local server and opens the book in your browser. Changes to `.qmd`
 ## Project Structure
 
 ```
-web-intro/
+practical-web-development/
 ├── en/                          # English
 │   ├── _quarto.yml
 │   ├── index.qmd

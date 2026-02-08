@@ -543,7 +543,7 @@ Experiment and check your results in the browser as you go. If you get stuck, th
 ::: {.callout-tip collapse="true"}
 ## Stuck? Solution available
 
-If you've given it an honest try and are truly stuck, a completed version of this project is available at [github.com/Applied-Computing-League/web-intro/chapters/code/chapter3](https://github.com/Applied-Computing-League/web-intro/tree/main/chapters/code/chapter3). Try to solve it yourself first. You learn more from the struggle than from reading the answer.
+If you've given it an honest try and are truly stuck, a completed version of this project is available at [github.com/Applied-Computing-League/practical-web-development/en/code/chapter3](https://github.com/Applied-Computing-League/practical-web-development/tree/main/en/code/chapter3). Try to solve it yourself first. You learn more from the struggle than from reading the answer.
 :::
 
 When you're done, your page should look something like this:
