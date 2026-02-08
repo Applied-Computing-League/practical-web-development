@@ -245,14 +245,6 @@ In web development, "API" usually means a server that returns structured data (o
 
 FastAPI is designed for building APIs (it's in the name), but it can also return HTML. We'll do both in this book.
 
-So far, all our endpoints return dictionaries, which FastAPI converts to JSON:
-
-```json
-{"user_id": 1, "name": "User 1"}
-```
-
-The `Content-Type` header is set to `application/json`. That's an API response. But for a website that humans visit directly, we want to return HTML instead.
-
 ## Returning HTML
 
 So far, all our endpoints return dictionaries, and FastAPI converts them to JSON. That's useful when your server is talking to other code (a mobile app, a JavaScript frontend, another server). But when a human visits your site in a browser, they don't want to see raw JSON. They want a rendered page.
