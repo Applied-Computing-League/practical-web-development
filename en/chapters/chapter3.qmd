@@ -4,7 +4,7 @@ The profile page we built in the last chapter works, but it looks like it's from
 
 CSS stands for Cascading Style Sheets. It's the language that controls colors, fonts, spacing, and layout. When you visit a website that looks good (or bad), that's CSS at work. HTML says "this is a heading." CSS says "this heading should be dark blue, 32 pixels tall, and have some space below it."
 
-Like HTML, CSS isn't a programming language. You write rules that describe how elements should look, and the browser applies them. Now let's see how to actually connect the two and apply CSS styles to our HTML structured text.
+Like HTML, CSS isn't a programming language. You write rules that describe how elements should look, and the browser applies them. There are a few ways to attach those rules to your HTML.
 
 ## How CSS Connects to HTML
 
@@ -271,11 +271,13 @@ Every HTML element is a box. Each box has four layers, from inside to outside:
 1. **Content**: The actual text, image, or other content
 2. **Padding**: Space between the content and the border
 3. **Border**: A line around the padding
-4. **Margin**: Space between this element and others
+4. **Margin**: Space between this element and neighboring elements
 
 ![The CSS Box Model](../images/chapter3/figure-3-1-en.svg)
 
-Here's an example:
+The first three (content, padding, border) make up the element itself: its visible size on screen. Margin is different. It's not part of the element; it's the gap between this element and whatever is next to it.
+
+This distinction matters when you set a width:
 
 ```css
 .card {
@@ -286,14 +288,16 @@ Here's an example:
 }
 ```
 
-How wide is this element on the page? It's not 300px. By default, `width` sets only the content width. The total width is composed of these:
+By default, `width` sets only the content width. The padding and border get added on top of that. So the element's visible size on screen is:
 
 - Content: 300px
 - Padding: 20px left + 20px right = 40px
 - Border: 2px left + 2px right = 4px
-- Total: 344px (margin doesn't count toward the element's size, but does affect spacing)
+- Visible width: 344px
 
-This math is annoying, but there's a fix:
+The margin adds another 10px on each side, so the element occupies 364px of horizontal space on the page. But the element itself (the box you see) is 344px wide.
+
+This math is annoying. You set `width: 300px` and the thing ends up 344px wide. There's a fix:
 
 ```css
 * {
@@ -301,11 +305,11 @@ This math is annoying, but there's a fix:
 }
 ```
 
-With `box-sizing: border-box`, `width` includes padding and border. Now if you set `width: 300px`, the element is actually 300px wide, and the browser subtracts space for padding and border from the content area.
+With `box-sizing: border-box`, `width` includes padding and border. Set `width: 300px` and the element is 300px wide, period. The browser subtracts space for padding and border from the content area automatically.
 
 Most developers add this rule to every project. Put it at the top of your CSS file.
 
-**Margins collapse**. If two elements are stacked vertically and one has `margin-bottom: 20px` and the next has `margin-top: 30px`, the space between them is 30px (not 50px). The larger margin wins. This is intentional, but it can be confusing (CSS is often a pain, get used to it).
+One more thing about margin: **margins collapse**. If two elements are stacked vertically and one has `margin-bottom: 20px` and the next has `margin-top: 30px`, the space between them is 30px, not 50px. The larger margin wins. This is intentional behavior, not a bug, but it surprises people. Padding never collapses.
 
 ## Layout with Flexbox
 
