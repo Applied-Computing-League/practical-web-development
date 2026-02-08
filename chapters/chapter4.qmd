@@ -1,0 +1,490 @@
+# Chapter 4: Servers with FastAPI
+
+So far we've written HTML and CSS files and opened them directly in a browser. That works, but those are static files. The browser reads them from your computer and displays them. No server involved.
+
+In Chapter 1, we talked about dynamic websites: servers that run code to generate responses. Now we're going to build one. When someone visits your site, your code will run, decide what to send back, and return it. The browser won't be reading files from disk. It'll be making HTTP requests to your server, and your server will respond.
+
+We're using Python with a framework called FastAPI. A framework is a collection of code that handles the boring parts (parsing HTTP requests, routing URLs, sending responses) so you can focus on the interesting parts (what your application actually does). FastAPI is modern, fast enough, and has good documentation. It's also relatively light, which is a pro for us. Since the main goal is learning, we want to understand what's happening rather than have magic do everything.
+
+## What a Server Actually Does
+
+A web server's job is simple: wait for HTTP requests, then send HTTP responses. That's it.
+
+When you run a server on your computer, it listens on a port (usually 8000 for development). When a browser makes a request to `http://localhost:8000/about`, your server receives that request, sees that the path is `/about`, runs whatever code you've associated with that path, and sends back the result.
+
+![Your code handles the request](images/chapter4/figure-4-1-en.svg)
+
+The code you write defines what happens for each path. Visit `/`? Run this function. Visit `/about`? Run that function. Visit `/users/42`? Run another function and pass it the number 42. This mapping from paths to functions is called **routing**.
+
+FastAPI handles the HTTP parsing and response formatting. You just write Python functions that return data, and FastAPI turns that data into proper HTTP responses. But before we can write any code, we need to set up our project.
+
+## Setting Up Your Project
+
+Create a new folder for this chapter:
+
+```bash
+mkdir chapter4
+cd chapter4
+```
+
+We'll use `uv` to manage our Python environment and dependencies. If you don't have `uv` installed:
+
+```bash
+# On macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# On Windows
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+Now initialize a new project and add FastAPI:
+
+```bash
+uv init
+uv add "fastapi[standard]"
+```
+
+The `[standard]` part installs FastAPI along with useful extras, including the server that will run our code.
+
+This creates a few files. Delete the `hello.py` that `uv init` creates (we don't need it), and make a new file called `main.py`. Your folder should look like this:
+
+```
+chapter4/
+├── .venv/
+├── .python-version
+├── pyproject.toml
+└── main.py
+```
+
+And these are the files we'll populate.
+
+## Type Hints
+
+Before we write our first server, we need to talk about type hints. FastAPI uses them heavily, and they're worth understanding.
+
+Type hints let you declare what type a variable or parameter should be:
+
+```python
+def greet(name: str) -> str:
+    return f"Hello, {name}!"
+```
+
+The `name: str` says this function expects a string. The `-> str` says it returns a string. Python doesn't enforce these at runtime, but your editor uses them to catch mistakes and provide better autocomplete.
+
+FastAPI uses type hints for something more powerful: automatic validation and conversion. When you write `user_id: int` in a FastAPI function, FastAPI will automatically convert the incoming string from the URL to an integer, and return an error if it can't. You get validation for free.
+
+You can also indicate that something might be missing:
+
+```python
+def greet(name: str | None = None) -> str:
+    if name:
+        return f"Hello, {name}!"
+    return "Hello, stranger!"
+```
+
+The `str | None` means "either a string or None." The `= None` makes it optional with a default value. That's enough type hint knowledge to get started. You'll pick up more as we go.
+
+## Your First Server
+
+Now let's write some code. In `main.py`:
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/")
+def home():
+    return {"message": "Hello, world!"}
+```
+
+Four lines of actual code. Here's what each does.
+
+`from fastapi import FastAPI` imports the FastAPI class.
+
+`app = FastAPI()` creates your application. This object handles all the HTTP stuff.
+
+`@app.get("/")` is a decorator that tells FastAPI: when someone makes a GET request to `/`, run the function below.
+
+`def home()` is a regular Python function. It returns a dictionary, and FastAPI automatically converts that to JSON and sends it to the browser.
+
+To run the server:
+
+```bash
+uv run fastapi dev main.py
+```
+
+You'll see output indicating the server is running at `http://127.0.0.1:8000`. Open that URL in your browser. You should see:
+
+```json
+{"message": "Hello, world!"}
+```
+
+That's JSON. Your server received an HTTP request and sent back an HTTP response, just like we discussed in Chapter 1. Open your browser's dev tools (F12), go to the Network tab, and refresh. You can see the request your browser made and the response your server sent.
+
+The `fastapi dev` command watches for changes and automatically restarts when you edit your code. Keep it running while you work through this chapter.
+
+## Routes and Endpoints
+
+A **route** is a path that your server responds to. An **endpoint** is the function that handles that route. Let's add more routes:
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/")
+def home():
+    return {"message": "Hello, world!"}
+
+
+@app.get("/about")
+def about():
+    return {"page": "About", "description": "This is the about page."}
+
+
+@app.get("/contact")
+def contact():
+    return {"email": "hello@example.com"}
+```
+
+Save the file. The server restarts automatically. Now try these URLs:
+
+- `http://localhost:8000/` returns the hello message
+- `http://localhost:8000/about` returns about info
+- `http://localhost:8000/contact` returns contact info
+- `http://localhost:8000/anything-else` returns a 404 error
+
+Each `@app.get()` decorator registers a route. The path in the decorator determines which URL triggers which function. Here's what that mapping looks like:
+
+![Routing maps paths to functions](images/chapter4/figure-4-2-en.svg)
+
+The function names don't matter to FastAPI (you could call them all `def x():`), but good names make your code more readable and help with automatic documentation (we'll see more about this later).
+
+## Path Parameters
+
+Sometimes you want part of the URL to be a variable. Consider a user profile page: you don't want to write a separate route for every user. You want one route that works for any user ID.
+
+```python
+@app.get("/users/{user_id}")
+def get_user(user_id: int):
+    return {"user_id": user_id, "name": f"User {user_id}"}
+```
+
+The `{user_id}` in the path is a **path parameter**. FastAPI extracts it from the URL and passes it to your function. The `user_id: int` type hint tells FastAPI to convert it to an integer.
+
+Add it to your FastAPI application, then try these:
+
+- `http://localhost:8000/users/1` returns `{"user_id": 1, "name": "User 1"}`
+- `http://localhost:8000/users/42` returns `{"user_id": 42, "name": "User 42"}`
+- `http://localhost:8000/users/abc` returns an error because "abc" isn't a valid integer
+
+That last one is interesting. You didn't write any validation code, but FastAPI returns a clear error message when the input is wrong. Here's what's happening behind the scenes:
+
+![FastAPI validates before your code runs](images/chapter4/figure-4-3-en.svg)
+
+That's the type hints doing their job. FastAPI checks the input, and if it doesn't match, your function never even runs.
+
+You can have multiple path parameters:
+
+```python
+@app.get("/users/{user_id}/posts/{post_id}")
+def get_user_post(user_id: int, post_id: int):
+    return {"user_id": user_id, "post_id": post_id}
+```
+
+This pattern is common for nested resources: a post belongs to a user, so the URL reflects that relationship. The order of parameters in your function doesn't matter, FastAPI matches them by name. But path parameters aren't the only way to pass data to your server. Sometimes you want optional filters or settings that don't belong in the URL path itself.
+
+## Query Parameters
+
+Path parameters are part of the URL path. **Query parameters** come after the `?` in a URL, like `/search?q=python&limit=10`. Remember the URL anatomy from Chapter 1?
+
+In FastAPI, any function parameter that isn't in the path is treated as a query parameter:
+
+```python
+@app.get("/search")
+def search(q: str, limit: int = 10):
+    return {"query": q, "limit": limit}
+```
+
+Add this to your code, then try these:
+
+- `http://localhost:8000/search?q=python` returns `{"query": "python", "limit": 10}`
+- `http://localhost:8000/search?q=python&limit=5` returns `{"query": "python", "limit": 5}`
+- `http://localhost:8000/search` returns an error because `q` is required
+
+The `limit: int = 10` default value makes that parameter optional. If the user doesn't provide it, it defaults to 10 (just like in a regular Python function).
+
+You can make a parameter optional with no default by using `None`:
+
+```python
+@app.get("/items")
+def list_items(category: str | None = None):
+    if category:
+        return {"filter": category, "items": []}
+    return {"items": []}
+```
+
+You've probably noticed that all our endpoints return dictionaries, and FastAPI converts them to JSON. That's not an accident. We've been building an API.
+
+## What is an API?
+
+You've probably heard the term "API" before. It stands for Application Programming Interface. The key word is "interface": it's a contract between two pieces of software that defines how they can talk to each other.
+
+Think of it like a language. When you call a function in Python, you need to know its name, what arguments it takes, and what it returns. That's an interface. A web API is the same idea, but over HTTP: it defines what URLs exist, what parameters they accept, and what data they return.
+
+![An API is a contract](images/chapter4/figure-4-4-en.svg)
+
+In web development, "API" usually means a server that returns structured data (often JSON) instead of HTML pages. When you visit a website, you're a human looking at HTML. When an app on your phone fetches your tweets or a JavaScript frontend fetches product data, it's code talking to an API. The API returns data in a format that code can easily parse and use.
+
+FastAPI is designed for building APIs (it's in the name), but it can also return HTML. We'll do both in this book.
+
+So far, all our endpoints return dictionaries, which FastAPI converts to JSON:
+
+```json
+{"user_id": 1, "name": "User 1"}
+```
+
+The `Content-Type` header is set to `application/json`. That's an API response. But for a website that humans visit directly, we want to return HTML instead.
+
+## Returning HTML
+
+For a website that humans visit (not just an API for code to consume), we want to return HTML that browsers can render:
+
+```python
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+
+app = FastAPI()
+
+@app.get("/", response_class=HTMLResponse)
+def home():
+    return """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>My Site</title>
+    </head>
+    <body>
+        <h1>Welcome!</h1>
+        <p>This is my website.</p>
+    </body>
+    </html>
+    """
+```
+
+The `response_class=HTMLResponse` tells FastAPI to set the `Content-Type` header to `text/html` instead of `application/json`. Now the browser renders the HTML instead of showing raw text.
+
+Writing HTML inside Python strings gets messy fast. In the next chapter, we'll use templates to keep HTML in separate files. But this shows the basic idea: your function returns something, FastAPI sends it to the browser with the right headers.
+
+## Hands-On: Serving the Profile Page
+
+Remember the profile page from Chapters 2 and 3? We opened it directly in the browser as a file. Now let's serve it from a real server.
+
+First, create a `static` folder for our CSS:
+
+```
+chapter4/
+├── .venv/
+├── main.py
+├── pyproject.toml
+└── static/
+    └── profile.css
+```
+
+Copy your `profile.css` from Chapter 3 into the `static` folder. If you don't have it, here's a minimal version:
+
+```css
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0 0 10px 0;
+}
+
+header nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+}
+
+main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+h2 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+#skills ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#skills li {
+    background-color: #3498db;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+}
+
+footer {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+```
+
+Now update `main.py`:
+
+```python
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+
+app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+profile = {
+    "name": "Philipe Ackerman",
+    "about": [
+        "Hi! I'm a math professor, and a really good one at that.",
+        "When I'm not teaching, you can find me cheering for my soccer team, Botafogo.",
+    ],
+    "skills": ["Math", "Having Long Hair", "Video Recording"],
+}
+
+
+@app.get("/", response_class=HTMLResponse)
+def home():
+    skills_html = "".join(f"<li>{skill}</li>" for skill in profile["skills"])
+    about_html = "".join(f"<p>{para}</p>" for para in profile["about"])
+
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>{profile["name"]} - Profile</title>
+        <link rel="stylesheet" href="/static/profile.css">
+    </head>
+    <body>
+        <header>
+            <h1>{profile["name"]}</h1>
+            <nav>
+                <a href="#about">About</a>
+                <a href="#skills">Skills</a>
+            </nav>
+        </header>
+
+        <main>
+            <section id="about">
+                <h2>About Me</h2>
+                {about_html}
+            </section>
+
+            <section id="skills">
+                <h2>Skills</h2>
+                <ul>
+                    {skills_html}
+                </ul>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 {profile["name"]}</p>
+        </footer>
+    </body>
+    </html>
+    """
+```
+
+A few things to note here.
+
+The `app.mount("/static", ...)` line tells FastAPI: any request starting with `/static/` should look for files in the `static` folder. This is how web applications serve CSS, JavaScript, and images.
+
+The `profile` dictionary is our data. Right now it's hardcoded, but it could come from a database, a file, or user input.
+
+The f-string builds the HTML dynamically. Change the name in the dictionary, save, and refresh. The page updates. This is the core idea of dynamic websites: the same code generates different pages based on different data.
+
+Run the server and visit `http://localhost:8000`. You should see the styled profile page:
+
+![The profile page served by FastAPI](images/chapter4/figure-4-5-en.png)
+
+Look at the Network tab in your dev tools. You'll see two requests: one for the HTML page and one for the CSS file.
+
+The HTML-in-Python-strings approach is getting unwieldy though. Imagine a page with forms, multiple sections, and conditional content. In the next chapter, we'll use templates to separate our HTML from our Python code properly.
+
+## Automatic API Documentation
+
+Before we wrap up, there's one more FastAPI feature worth seeing. Visit `http://localhost:8000/docs` while your server is running:
+
+![FastAPI generates interactive documentation](images/chapter4/figure-4-6-en.png)
+
+FastAPI automatically generates interactive documentation for all your endpoints. It shows the paths, the parameters, the expected types, and even lets you test the endpoints directly from the browser. This is generated from your code (the function names, type hints, and docstrings all contribute).
+
+This documentation is useful when you're building an API that other developers will use. They can see exactly what endpoints exist and what data they expect, without reading your code. It's also helpful during development: you can test your endpoints without writing any client code.
+
+## Chapter Summary
+
+- A web server waits for HTTP requests and sends responses
+- FastAPI handles the HTTP details; you write Python functions
+- Type hints tell FastAPI what types to expect and it validates automatically
+- Routes map URL paths to functions: `@app.get("/path")`
+- Path parameters are variables in the URL: `/users/{user_id}`
+- Query parameters come after `?`: `/search?q=term&limit=10`
+- Return a dict for JSON; use `HTMLResponse` for HTML
+- Use `StaticFiles` to serve CSS, JavaScript, and images
+- Run with `uv run fastapi dev main.py`
+- Visit `/docs` for automatic API documentation
+
+Writing HTML in Python strings is awkward. In the next chapter, we'll use templates to keep HTML in separate files where it belongs.
+
+## Exercises
+
+1. Add an `/api/profile` endpoint that returns the profile data as JSON instead of HTML. Visit it in your browser and compare the `Content-Type` headers between `/` and `/api/profile` using dev tools.
+
+2. Add a path parameter to create different profiles: `/profile/{username}`. Create a dictionary with a few different profiles and return the matching one. If the username isn't found, return a 404 error (look up `HTTPException` in the FastAPI documentation).
+
+3. Add a `/api/skills` endpoint that returns just the skills list as JSON. Then add an optional `limit` query parameter that limits how many skills are returned.
+
+4. Add a "contact" section to the profile page. Store an email address in the profile dictionary and display it on the page.
+
+5. Open `/docs` and try out your endpoints from there. Add a docstring to one of your endpoint functions and see how it appears in the documentation.
+
+6. Using your browser's dev tools, watch the Network tab while you refresh the profile page. How many requests does the browser make? What happens if the CSS file is missing?

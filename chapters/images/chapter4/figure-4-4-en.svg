@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 320">
+  <style>
+    .background { fill: #f8f9fa; }
+    .client-box { fill: #e6f7ff; stroke: #1890ff; stroke-width: 1.5; }
+    .server-box { fill: #f6ffed; stroke: #52c41a; stroke-width: 1.5; }
+    .contract-box { fill: #fff7e6; stroke: #fa8c16; stroke-width: 1.5; }
+    .arrow { stroke: #666; stroke-width: 1.5; }
+    .label { font-family: 'Arial', sans-serif; font-size: 13px; text-anchor: middle; fill: #333; }
+    .label-small { font-family: 'Arial', sans-serif; font-size: 11px; text-anchor: middle; fill: #666; }
+    .label-mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 11px; fill: #555; text-anchor: middle; }
+    .title { font-family: 'Arial', sans-serif; font-size: 18px; font-weight: bold; text-anchor: middle; fill: #333; }
+    .box-title { font-family: 'Arial', sans-serif; font-size: 14px; font-weight: bold; text-anchor: middle; }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#666" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="700" height="320" class="background" />
+
+  <!-- Title -->
+  <text x="350" y="30" class="title">An API is a Contract</text>
+
+  <!-- Client box -->
+  <rect x="30" y="70" width="130" height="160" rx="6" ry="6" class="client-box" />
+  <text x="95" y="100" class="box-title" fill="#1890ff">Clients</text>
+  <text x="95" y="130" class="label-small">Browser</text>
+  <text x="95" y="150" class="label-small">Mobile App</text>
+  <text x="95" y="170" class="label-small">Other Code</text>
+  <text x="95" y="200" class="label-small">(anything that</text>
+  <text x="95" y="216" class="label-small">speaks HTTP)</text>
+
+  <!-- Contract box -->
+  <rect x="210" y="50" width="280" height="220" rx="6" ry="6" class="contract-box" />
+  <text x="350" y="80" class="box-title" fill="#d46b08">The Contract (API)</text>
+
+  <text x="350" y="110" class="label-small">Endpoints:</text>
+
+  <text x="350" y="140" class="label-mono">GET /users/{id}</text>
+  <text x="350" y="158" class="label-mono">→ {"id", "name"}</text>
+
+  <text x="350" y="188" class="label-mono">GET /search?q=...</text>
+  <text x="350" y="206" class="label-mono">→ {"query", "results"}</text>
+
+  <text x="350" y="236" class="label-mono">POST /users</text>
+  <text x="350" y="254" class="label-mono">→ {"id", "created"}</text>
+
+  <!-- Server box -->
+  <rect x="540" y="70" width="130" height="160" rx="6" ry="6" class="server-box" />
+  <text x="605" y="100" class="box-title" fill="#389e0d">Server</text>
+  <text x="605" y="135" class="label-small">FastAPI</text>
+  <text x="605" y="155" class="label-small">+</text>
+  <text x="605" y="175" class="label-small">Your Code</text>
+
+  <!-- Arrows left side -->
+  <line x1="160" y1="130" x2="205" y2="130" class="arrow" marker-end="url(#arrowhead)" />
+  <line x1="205" y1="170" x2="160" y2="170" class="arrow" marker-end="url(#arrowhead)" />
+
+  <!-- Arrows right side -->
+  <line x1="490" y1="130" x2="535" y2="130" class="arrow" marker-end="url(#arrowhead)" />
+  <line x1="535" y1="170" x2="490" y2="170" class="arrow" marker-end="url(#arrowhead)" />
+
+  <!-- Bottom note -->
+  <text x="350" y="300" class="label-small">Both sides agree on the format. That's what makes it work.</text>
+</svg>

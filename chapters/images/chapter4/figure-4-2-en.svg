@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 250">
+  <style>
+    .background { fill: #f8f9fa; }
+    .path-box { fill: #fff7e6; stroke: #fa8c16; stroke-width: 1.5; }
+    .func-box { fill: #f6ffed; stroke: #52c41a; stroke-width: 1.5; }
+    .error-box { fill: #fff1f0; stroke: #ff7875; stroke-width: 1.5; }
+    .arrow { stroke: #666; stroke-width: 1.5; }
+    .label { font-family: 'Arial', sans-serif; font-size: 13px; text-anchor: middle; fill: #333; }
+    .label-mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 12px; text-anchor: middle; fill: #555; }
+    .title { font-family: 'Arial', sans-serif; font-size: 18px; font-weight: bold; text-anchor: middle; fill: #333; }
+    .column-title { font-family: 'Arial', sans-serif; font-size: 14px; font-weight: bold; text-anchor: middle; fill: #666; }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#666" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="550" height="250" class="background" />
+
+  <!-- Title -->
+  <text x="275" y="28" class="title">Routing: Paths Map to Functions</text>
+
+  <!-- Column titles -->
+  <text x="120" y="55" class="column-title">Incoming Request</text>
+  <text x="430" y="55" class="column-title">Your Function</text>
+
+  <!-- Row 1 -->
+  <rect x="30" y="70" width="180" height="32" rx="4" ry="4" class="path-box" />
+  <text x="120" y="91" class="label-mono">GET /</text>
+  <line x1="210" y1="86" x2="320" y2="86" class="arrow" marker-end="url(#arrowhead)" />
+  <rect x="325" y="70" width="195" height="32" rx="4" ry="4" class="func-box" />
+  <text x="422" y="91" class="label-mono">home()</text>
+
+  <!-- Row 2 -->
+  <rect x="30" y="112" width="180" height="32" rx="4" ry="4" class="path-box" />
+  <text x="120" y="133" class="label-mono">GET /about</text>
+  <line x1="210" y1="128" x2="320" y2="128" class="arrow" marker-end="url(#arrowhead)" />
+  <rect x="325" y="112" width="195" height="32" rx="4" ry="4" class="func-box" />
+  <text x="422" y="133" class="label-mono">about()</text>
+
+  <!-- Row 3 -->
+  <rect x="30" y="154" width="180" height="32" rx="4" ry="4" class="path-box" />
+  <text x="120" y="175" class="label-mono">GET /users/42</text>
+  <line x1="210" y1="170" x2="320" y2="170" class="arrow" marker-end="url(#arrowhead)" />
+  <rect x="325" y="154" width="195" height="32" rx="4" ry="4" class="func-box" />
+  <text x="422" y="175" class="label-mono">get_user(user_id=42)</text>
+
+  <!-- Row 4 (error) -->
+  <rect x="30" y="196" width="180" height="32" rx="4" ry="4" class="path-box" />
+  <text x="120" y="217" class="label-mono">GET /xyz</text>
+  <line x1="210" y1="212" x2="320" y2="212" class="arrow" marker-end="url(#arrowhead)" />
+  <rect x="325" y="196" width="195" height="32" rx="4" ry="4" class="error-box" />
+  <text x="422" y="217" class="label-mono">404 Not Found</text>
+</svg>
