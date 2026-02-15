@@ -8,7 +8,7 @@ From Server-Rendered Pages to React with Python and FastAPI.
    <img src="https://github.com/igorbenav/practical-web-development/blob/main/en/images/cover.png" width="30%" alt="">
 </a>
 
-A book that teaches web development starting from how HTTP works, through HTML, CSS, and server-side Python with FastAPI, all the way to HTMX, React, databases, authentication, and deployment. Opinionated, hands-on, and meant to be read in order. Each chapter builds on the previous one.
+An open book that teaches web development starting from how HTTP works, through HTML, CSS, and server-side Python with FastAPI, all the way to HTMX, React, databases, authentication, and deployment. Opinionated, hands-on, and meant to be read in order. Each chapter builds on the previous one.
 
 Assumes Python knowledge. No prior web experience needed.
 
@@ -137,6 +137,17 @@ When your translation or review is merged, add yourself in the same pull request
 2. The **Contributors** table in your language's `index.qmd` (this appears in the actual book)
 
 Roles: "Translator", "Reviewer", or both.
+
+## Citation
+
+```bibtex
+@book{benav2026practical-web-development,
+  title     = {Practical Web Development: From Server-Rendered Pages to React with Python and FastAPI},
+  author    = {Igor Benav Magalhães},
+  year      = {2026},
+  url       = {https://github.com/igorbenav/practical-web-development}
+}
+```
 
 ## License
 
