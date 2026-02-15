@@ -2,11 +2,15 @@
 
 From Server-Rendered Pages to React with Python and FastAPI.
 
-> **[Read the English version (PDF)](docs/en/Practical-Web-Development-(en).pdf)**
+<a href="docs/en/Practical-Web-Development-(en).pdf">
+   <img src="https://github.com/igorbenav/practical-web-development/blob/main/en/images/cover.png" width="30%" alt="">
+</a>
 
 A book that teaches web development starting from how HTTP works, through HTML, CSS, and server-side Python with FastAPI, all the way to HTMX, React, databases, authentication, and deployment. Opinionated, hands-on, and meant to be read in order. Each chapter builds on the previous one.
 
 Assumes Python knowledge. No prior web experience needed.
+
+> **[Read the English version (PDF)](docs/en/Practical-Web-Development-(en).pdf)**
 
 ## Table of Contents
 
