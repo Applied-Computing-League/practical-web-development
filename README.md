@@ -1,3 +1,5 @@
+<div align="center">
+
 # Practical Web Development
 
 From Server-Rendered Pages to React with Python and FastAPI.
@@ -10,12 +12,16 @@ A book that teaches web development starting from how HTTP works, through HTML, 
 
 Assumes Python knowledge. No prior web experience needed.
 
-> **[Read the English version (PDF)](docs/en/Practical-Web-Development-(en).pdf)**
+**[Read the English version (PDF)](docs/en/Practical-Web-Development-(en).pdf)**
+
+</div>
+
+---
 
 ## Table of Contents
 
 | Chapter | Topic | Code |
-|---------|-------|------|
+|:-------:|-------|:----:|
 | 1 | How the Web Works | — |
 | 2 | HTML | [chapter2](en/code/chapter2) |
 | 3 | CSS Basics | [chapter3](en/code/chapter3) |
@@ -29,16 +35,18 @@ More chapters will be added.
 ## Available Languages
 
 | Language | Directory | Status |
-|----------|-----------|--------|
+|:--------:|:---------:|:------:|
 | English | [en/](en/) | In progress |
 
-## Prerequisites
+## Getting Started
+
+### Prerequisites
 
 - [Python 3.11+](https://www.python.org/downloads/)
 - [uv](https://docs.astral.sh/uv/getting-started/installation/) - Python package manager
 - [Quarto](https://quarto.org/docs/get-started/) - Publishing system
 
-## Setup
+### Setup
 
 1. Clone the repository:
    ```bash
@@ -53,29 +61,13 @@ More chapters will be added.
 
 ## Building the Book
 
-### HTML (default)
-
-```bash
-uv run quarto render en/
-```
-
-The output will be in `docs/en/`. Open `docs/en/index.html` in your browser to view.
-
-### PDF
-
-```bash
-uv run quarto render en/ --to pdf
-```
+| Format | Command | Output |
+|--------|---------|--------|
+| HTML (default) | `uv run quarto render en/` | `docs/en/index.html` |
+| PDF | `uv run quarto render en/ --to pdf` | `docs/en/` |
+| Preview with live reload | `uv run quarto preview en/` | localhost |
 
 > Note: PDF rendering requires a LaTeX distribution (e.g., [TinyTeX](https://yihui.org/tinytex/), [TeX Live](https://www.tug.org/texlive/), or [MiKTeX](https://miktex.org/)).
-
-### Preview with live reload
-
-```bash
-uv run quarto preview en/
-```
-
-This starts a local server and opens the book in your browser. Changes to `.qmd` files will automatically trigger a rebuild.
 
 ## Project Structure
 
@@ -88,16 +80,13 @@ practical-web-development/
 │   ├── references.bib
 │   ├── chapters/
 │   │   ├── chapter1.qmd
-│   │   ├── ...
-│   │   └── chapter7.qmd
+│   │   └── ...
 │   ├── images/                  # Figures (language-specific)
 │   │   ├── chapter1/
-│   │   ├── ...
-│   │   └── chapter7/
+│   │   └── ...
 │   └── code/                    # Completed code per chapter
 │       ├── chapter2/
-│       ├── ...
-│       └── chapter7/
+│       └── ...
 ├── docs/                        # Rendered output
 │   └── en/
 ├── README.md
@@ -134,7 +123,7 @@ To translate the book into a new language:
    uv run quarto render pt/ --to pdf
    ```
 
-4. Add yourself to the contributors table below and submit a pull request.
+5. Add yourself to the contributors table below and submit a pull request.
 
 ## Contributors
 
